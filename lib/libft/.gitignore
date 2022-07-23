@@ -1,0 +1,5 @@
+*_test.c
+*.o
+*.a
+test/*
+test/
