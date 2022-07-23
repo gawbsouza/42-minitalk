@@ -6,7 +6,7 @@
 /*   By: gasouza <gasouza@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 18:38:45 by gasouza           #+#    #+#             */
-/*   Updated: 2022/07/22 19:01:14 by gasouza          ###   ########.fr       */
+/*   Updated: 2022/07/23 00:54:00 by gasouza          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,30 +24,33 @@ static void	result(const char *test, int result)
 
 static void	test(void)
 {
-	char		build = 0;
 	t_charbuild	*cb = new_charbuild();
 
 	result("create", cb != NULL);
-	result("null charbuild", build_char(NULL, BIT_ZERO) == -1);
-	result("invalid bit value", build_char(NULL, 2) == -1);
 	build_char(cb, BIT_ONE);
-	printf("B: %08b N: %d\n", cb->buffer, cb->next_bit);
+	/* printf("B: %08b N: %d\n", cb->buffer, cb->next_bit); */
 	build_char(cb, BIT_ONE);
-	printf("B: %08b N: %d\n", cb->buffer, cb->next_bit);
 	build_char(cb, BIT_ONE);
-	printf("B: %08b N: %d\n", cb->buffer, cb->next_bit);
 	build_char(cb, BIT_ZERO);
-	printf("B: %08b N: %d\n", cb->buffer, cb->next_bit);
 	build_char(cb, BIT_ZERO);
-	printf("B: %08b N: %d\n", cb->buffer, cb->next_bit);
 	build_char(cb, BIT_ZERO);
-	printf("B: %08b N: %d\n", cb->buffer, cb->next_bit);
 	build_char(cb, BIT_ONE);
-	printf("B: %08b N: %d\n", cb->buffer, cb->next_bit);
-	build = build_char(cb, BIT_ZERO);
-	printf("B: %08b N: %d\n", cb->buffer, cb->next_bit);
-	result("valid char created", build == 'G');
-	result("charbuild reseted", build_char(cb, BIT_ZERO) == -1 && cb->next_bit == 1);
+	build_char(cb, BIT_ZERO);
+	result("valid char created #1 : value", cb->buffer == 'G');
+	result("valid char created #1 : status", cb->done == 1 && cb->next_bit == 0);
+	build_char(cb, BIT_ZERO);
+	result("Inaltered value / status when done", 
+			cb->buffer == 'G' && cb->done == 1 && cb->next_bit == 0);
+	cb->done = 0;
+	build_char(cb, BIT_ZERO);
+	build_char(cb, BIT_ONE);
+	build_char(cb, BIT_ZERO);
+	build_char(cb, BIT_ZERO);
+	build_char(cb, BIT_ONE);
+	build_char(cb, BIT_ZERO);
+	build_char(cb, BIT_ONE);
+	build_char(cb, BIT_ZERO);
+	result("valid char created #2", cb->buffer == 'R');
 }
 
 int main (void)

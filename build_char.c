@@ -6,7 +6,7 @@
 /*   By: gasouza <gasouza@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 16:02:56 by gasouza           #+#    #+#             */
-/*   Updated: 2022/07/22 19:05:02 by gasouza          ###   ########.fr       */
+/*   Updated: 2022/07/23 00:53:21 by gasouza          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,24 +21,24 @@ t_charbuild	*new_charbuild(void)
 	{
 		cb->buffer = 0;
 		cb->next_bit = 0;
+		cb->done = 0;
 	}
 	return (cb);
 }
 
 /* Use OR mask to insert a bit at your correct postion on buffer */
-char	build_char(t_charbuild *cb, int bit)
+void	build_char(t_charbuild *cb, int bit)
 {
-	if (!cb || (bit != BIT_ONE && bit != BIT_ZERO))
-		return (-1);
-	if (cb->next_bit > 7)
+	if (cb && !cb->done)
 	{
-		cb->buffer = 0;
-		cb->next_bit = 0;
+		if (cb->next_bit == 0)
+			cb->buffer = 0;
+		if (bit == BIT_ONE)
+			cb->buffer |= (1 << cb->next_bit);
+		if (++cb->next_bit > 7)
+		{
+			cb->next_bit = 0;
+			cb->done = 1;
+		}
 	}
-	if (bit)
-		cb->buffer |= (1 << cb->next_bit);
-	cb->next_bit++;
-	if (cb->next_bit > 7)
-		return (cb->buffer);
-	return (-1);
 }
