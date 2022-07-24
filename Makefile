@@ -6,7 +6,7 @@
 #    By: gasouza <gasouza@student.42sp.org.br>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/07/22 10:59:30 by gasouza           #+#    #+#              #
-#    Updated: 2022/07/24 06:28:33 by gasouza          ###   ########.fr        #
+#    Updated: 2022/07/24 07:06:10 by gasouza          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,11 +27,11 @@ FTPRINTF_L	= -L$(FTPRINTF_D) -lftprintf
 FTPRINTF_A 	= $(FTPRINTF_D)/libftprintf.a
 LIBS_L		= $(LIBFT_L) $(FTPRINTF_L)
 LIBS_I		= -I$(LIBFT_D) -I$(FTPRINTF_D)
-LIBS_A		= $(LIBFT_A) $(GNL_A) $(FTPRINTF_A)
+LIBS_A		= $(LIBFT_A) $(FTPRINTF_A)
 
 all: $(NAME)
 
-$(NAME):
+$(NAME): 
 
 server: $(SRCS_D)/server.o $(LIBS_A)
 	$(CC) $(CFLAGS) $(LIBS_L) $(LIBS_I) $^ -o server

@@ -6,7 +6,7 @@
 /*   By: gasouza <gasouza@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 21:22:16 by gasouza           #+#    #+#             */
-/*   Updated: 2022/07/24 01:19:51 by gasouza          ###   ########.fr       */
+/*   Updated: 2022/07/24 06:48:49 by gasouza          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,16 @@ static void	transmit(const char *msg, int pid)
 
 static void	confirm_received(int sig)
 {
-	if (sig == SIGUSR1 || sig == SIGUSR2)
+	if (sig == SIGUSR1)
+	{
 		g_received = 1;
+		ft_putstr_fd("Confirm received from bit: 0\n", 1);
+	}
+	if (sig == SIGUSR2)
+	{
+		g_received = 1;
+		ft_putstr_fd("Confirm received from bit: 1\n", 1);
+	}
 }
 
 static void	setup_signals_handle(void)
