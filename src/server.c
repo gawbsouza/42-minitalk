@@ -6,47 +6,53 @@
 /*   By: gasouza <gasouza@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 21:24:59 by gasouza           #+#    #+#             */
-/*   Updated: 2022/07/23 21:29:58 by gasouza          ###   ########.fr       */
+/*   Updated: 2022/07/24 01:14:29 by gasouza          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 
-static t_builders	g_builders;
+static t_charmaker	g_charmaker;
 
-static void	sigusr_handle(int sig)
+static void	sigusr_handle(int sig, siginfo_t *info, void *context)
 {
-	if (sig != SIGUSR1 && sig != SIGUSR2)
-		return ;
-	if (!g_builders.cb)
-		g_builders.cb = char_build_new();
-	if (sig == SIGUSR1)
-		char_build(g_builders.cb, BIT_ZERO);
-	if (sig == SIGUSR2)
-		char_build(g_builders.cb, BIT_ONE);
-	if (g_builders.cb->done)
+	(void)context;
+	if (g_charmaker.calls > 7)
 	{
-		if (!g_builders.sb)
-			g_builders.sb = str_build_new();
-		str_build(g_builders.sb, g_builders.cb->buffer);
-		if (g_builders.cb->buffer == '\0')
-		{
-			write(1, g_builders.sb->buffer, g_builders.sb->next_char - 1);
-			write(1, "\n", 1);
-			str_build_destroy(&g_builders.sb);
-		}
-		char_build_destroy(&g_builders.cb);
+		g_charmaker.calls = 0;
+		g_charmaker.buff = 0;
 	}
+	usleep(USLEEP_TIME);
+	if (sig == SIGUSR1)
+		kill(info->si_pid, SIGUSR1);
+	if (sig == SIGUSR2)
+	{
+		g_charmaker.buff |= 1 << g_charmaker.calls;
+		kill(info->si_pid, SIGUSR2);
+	}
+	if (g_charmaker.calls == 7)
+	{
+		if (g_charmaker.buff == '\0')
+			write(1, "\n", 1);
+		else
+			write(1, &g_charmaker.buff, 1);
+	}
+	g_charmaker.calls++;
 }
 
 static void	setup_signals_handle(void)
 {
-	if (signal(SIGUSR1, sigusr_handle) == SIG_ERR)
+	struct sigaction	sa;
+
+	sa.sa_flags = SA_SIGINFO;
+	sa.sa_sigaction = sigusr_handle;
+	sigemptyset(&sa.sa_mask);
+	if (sigaction(SIGUSR1, &sa, NULL) == -1)
 	{
 		ft_printf("SIGUSR1 setup failure.\n");
 		exit(EXIT_FAILURE);
 	}
-	if (signal(SIGUSR2, sigusr_handle) == SIG_ERR)
+	if (sigaction(SIGUSR2, &sa, NULL) == -1)
 	{
 		ft_printf("SIGUSR2 setup failure.\n");
 		exit(EXIT_FAILURE);
@@ -55,8 +61,6 @@ static void	setup_signals_handle(void)
 
 int	main(void)
 {
-	g_builders.cb = NULL;
-	g_builders.sb = NULL;
 	setup_signals_handle();
 	ft_printf(":: MiniTalk [GASOUZA] ::\n");
 	ft_printf("Server PID: %d\n\n", getpid());
