@@ -6,18 +6,21 @@
 /*   By: gasouza <gasouza@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 16:06:50 by gasouza           #+#    #+#             */
-/*   Updated: 2022/07/23 00:43:39 by gasouza          ###   ########.fr       */
+/*   Updated: 2022/07/23 20:55:32 by gasouza          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINITALK_H
 # define MINITALK_H
 
-# include <stdio.h>
 # include <stdlib.h>
-# include <string.h>
+# include <signal.h>
+# include <unistd.h>
+# include "libft.h"
+# include "ft_printf.h"
 
-# define BUFFER_SIZE 2
+# define USLEEP_TIME 500
+# define BUFFER_SIZE 1024
 # define BIT_ZERO 0
 # define BIT_ONE 1
 
@@ -35,9 +38,18 @@ typedef struct s_strbuild
 	size_t	next_char;
 }	t_strbuild;
 
-t_charbuild	*new_charbuild(void);
-void		build_char(t_charbuild *cb, int bit);
-t_strbuild	*new_strbuild(size_t buffer_size);
-void		build_str(t_strbuild *sb, char c, size_t buffer_size);
+typedef struct s_builders
+{
+	t_charbuild	*cb;
+	t_strbuild	*sb;
+}	t_builders;
+
+t_strbuild	*str_build_new(void);
+void		str_build(t_strbuild *sb, char c);
+void		str_build_destroy(t_strbuild **sb);
+
+t_charbuild	*char_build_new(void);
+void		char_build(t_charbuild *cb, int bit);
+void		char_build_destroy(t_charbuild **cb);
 
 #endif
