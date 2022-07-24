@@ -6,7 +6,7 @@
 #    By: gasouza <gasouza@student.42sp.org.br>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/07/22 10:59:30 by gasouza           #+#    #+#              #
-#    Updated: 2022/07/24 00:48:07 by gasouza          ###   ########.fr        #
+#    Updated: 2022/07/24 06:28:33 by gasouza          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,12 +31,12 @@ LIBS_A		= $(LIBFT_A) $(GNL_A) $(FTPRINTF_A)
 
 all: $(NAME)
 
-$(NAME): $(LIBS_A) $(INCS_D)/$(INCS)
+$(NAME):
 
-server: $(SRCS_D)/server.o
+server: $(SRCS_D)/server.o $(LIBS_A)
 	$(CC) $(CFLAGS) $(LIBS_L) $(LIBS_I) $^ -o server
 
-client: $(SRCS_D)/client.o
+client: $(SRCS_D)/client.o $(LIBS_A)
 	$(CC) $(CFLAGS) $(LIBS_L) $(LIBS_I) $^ -o client
 
 $(LIBFT_A): 
