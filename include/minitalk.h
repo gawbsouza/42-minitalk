@@ -6,7 +6,7 @@
 /*   By: gasouza <gasouza@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 16:06:50 by gasouza           #+#    #+#             */
-/*   Updated: 2022/07/24 01:15:04 by gasouza          ###   ########.fr       */
+/*   Updated: 2022/07/24 01:22:12 by gasouza          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # include "libft.h"
 # include "ft_printf.h"
 
-# define USLEEP_TIME 500
+# define USLEEP_TIME 750
 
 typedef struct s_charmaker
 {

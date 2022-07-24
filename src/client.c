@@ -6,13 +6,13 @@
 /*   By: gasouza <gasouza@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 21:22:16 by gasouza           #+#    #+#             */
-/*   Updated: 2022/07/24 00:53:30 by gasouza          ###   ########.fr       */
+/*   Updated: 2022/07/24 01:19:51 by gasouza          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 
-static volatile int	g_recived;
+static volatile int	g_received;
 
 static void	transmit(const char *msg, int pid)
 {
@@ -32,8 +32,8 @@ static void	transmit(const char *msg, int pid)
 				kill(pid, SIGUSR2);
 			else
 				kill(pid, SIGUSR1);
-			g_recived = 0;
-			while (!g_recived)
+			g_received = 0;
+			while (!g_received)
 				;
 			tmp_char >>= 1;
 		}
@@ -41,20 +41,20 @@ static void	transmit(const char *msg, int pid)
 	}
 }
 
-static void	confirm_recived(int sig)
+static void	confirm_received(int sig)
 {
 	if (sig == SIGUSR1 || sig == SIGUSR2)
-		g_recived = 1;
+		g_received = 1;
 }
 
 static void	setup_signals_handle(void)
 {
-	if (signal(SIGUSR1, confirm_recived) == SIG_ERR)
+	if (signal(SIGUSR1, confirm_received) == SIG_ERR)
 	{
 		ft_printf("SIGUSR1 setup failure.\n");
 		exit(EXIT_FAILURE);
 	}
-	if (signal(SIGUSR2, confirm_recived) == SIG_ERR)
+	if (signal(SIGUSR2, confirm_received) == SIG_ERR)
 	{
 		ft_printf("SIGUSR2 setup failure.\n");
 		exit(EXIT_FAILURE);
@@ -68,7 +68,7 @@ int	main(int argc, char **argv)
 		ft_printf("Usage: client <PID> <Message>\n");
 		return (EXIT_FAILURE);
 	}
-	g_recived = 0;
+	g_received = 0;
 	setup_signals_handle();
 	transmit(argv[2], ft_atoi(argv[1]));
 	ft_printf("Message sent.\n");
